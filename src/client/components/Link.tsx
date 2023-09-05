@@ -4,25 +4,29 @@ import { useRouter } from 'next/router';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 import MuiLink, { LinkProps as MuiLinkProps } from '@material-ui/core/Link';
 
-type NextComposedProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & NextLinkProps;
+type NextComposedProps = React.AnchorHTMLAttributes<HTMLAnchorElement> &
+  NextLinkProps;
 
-const NextComposed = React.forwardRef<HTMLAnchorElement, NextComposedProps>((props, ref) => {
-  const { as, href, replace, scroll, passHref, shallow, prefetch, ...other } = props;
+const NextComposed = React.forwardRef<HTMLAnchorElement, NextComposedProps>(
+  (props, ref) => {
+    const { as, href, replace, scroll, passHref, shallow, prefetch, ...other } =
+      props;
 
-  return (
-    <NextLink
-      href={href}
-      prefetch={prefetch}
-      as={as}
-      replace={replace}
-      scroll={scroll}
-      shallow={shallow}
-      passHref={passHref}
-    >
-      <a ref={ref} {...other} />
-    </NextLink>
-  );
-});
+    return (
+      <NextLink
+        href={href}
+        prefetch={prefetch}
+        as={as}
+        replace={replace}
+        scroll={scroll}
+        shallow={shallow}
+        passHref={passHref}
+      >
+        <a ref={ref} {...other} />
+      </NextLink>
+    );
+  },
+);
 
 interface LinkPropsBase {
   activeClassName?: string;
@@ -49,7 +53,14 @@ function Link(props: LinkProps) {
   if (naked) {
     return <NextComposed className={className} ref={innerRef} {...other} />;
   }
-  return <MuiLink component={NextComposed} className={className} ref={innerRef} {...other} />;
+  return (
+    <MuiLink
+      component={NextComposed}
+      className={className}
+      ref={innerRef}
+      {...other}
+    />
+  );
 }
 
 export default React.forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => (

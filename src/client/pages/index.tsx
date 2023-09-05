@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
-import {
-  makeStyles,
-  createStyles,
-  Theme,
-} from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -11,27 +7,28 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-// import Link from '../components/Link';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      textAlign: 'center',
-      paddingTop: theme.spacing(12),
-    },
-  })
-);
+const useStyles = makeStyles<Theme, any>((theme) => ({
+  root: {
+    textAlign: 'center',
+    paddingTop: theme.spacing(12),
+  },
+  nameHeading: {
+    color: ({ color, isOpen }) => (isOpen ? 'red' : color),
+  },
+}));
 
-const Index = ({name}) => {
-  const classes = useStyles({});
+const Index = (props) => {
+  const { name } = props;
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleClick = () => setOpen(true);
+  const classes = useStyles({ ...props, isOpen: open });
 
   return (
     <div className={classes.root}>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Super Secret Password</DialogTitle>
+        <DialogTitle>Super Secret Passwords</DialogTitle>
         <DialogContent>
           <DialogContentText>1-2-3-4-5</DialogContentText>
         </DialogContent>
@@ -41,7 +38,7 @@ const Index = ({name}) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom className={classes.nameHeading}>
         {name}
       </Typography>
       <img src="/static/logo.png" />
@@ -55,18 +52,8 @@ const Index = ({name}) => {
   );
 };
 
-
 Index.getInitialProps = async ({ req, query }) => {
-  const isServer = !!req;
-
-  let name;
-  if (isServer) {
-    name = query.name;
-  }
-
-  return {
-    name,
-  };
+  return query;
 };
 
 export default Index;

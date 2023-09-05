@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get } from '@nestjs/common';
 
-import { DummyService } from './dummy.service'
+import { DummyService } from './dummy.service';
 
 @Controller('api/dummy')
 export class DummyController {
@@ -8,6 +8,6 @@ export class DummyController {
 
   @Get()
   async one(): Promise<any> {
-    return this.dummyService.get()
+    return this.dummyService.get();
   }
 }
