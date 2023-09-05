@@ -11,6 +11,6 @@ export class PageController {
     @Req() req: IncomingMessage,
     @Res() res: ServerResponse,
   ) {
-    this.next.render('/index', { name: 'kishore3', color: 'green' }, req, res);
+    this.next.render('/index', { name: 'kishore3', color: 'yellow' }, req, res);
   }
 }

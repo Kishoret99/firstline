@@ -20,9 +20,9 @@ export class NextService {
     res: ServerResponse,
   ): Promise<void>;
 
-  public async render(
+  public async render<T>(
     page: string,
-    data: any,
+    data: T,
     req: IncomingMessage,
     res: ServerResponse,
   ): Promise<void>;

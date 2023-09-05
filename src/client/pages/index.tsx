@@ -1,32 +1,49 @@
 import React, { useState } from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, Theme, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import theme from '../shared/theme';
 
-const useStyles = makeStyles<Theme, any>((theme) => ({
+export const MyButton = withStyles({
+  root: {
+    backgroundColor: 'red',
+  },
+})(Button);
+
+const Layout = withStyles({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing(12),
+    paddingTop: theme.spacing(2),
   },
-  nameHeading: {
-    color: ({ color, isOpen }) => (isOpen ? 'red' : color),
+})(Grid);
+
+export const MyButton2 = withStyles({
+  root: {
+    margin: '20px',
+    [theme.breakpoints.down('md')]: {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    [theme.breakpoints.up('md')]: {
+      backgroundColor: theme.palette.primary.main,
+    },
+    color: (props) => props?.textcolor,
   },
-}));
+})(MyButton);
 
 const Index = (props) => {
   const { name } = props;
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleClick = () => setOpen(true);
-  const classes = useStyles({ ...props, isOpen: open });
 
   return (
-    <div className={classes.root}>
+    <Layout>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Super Secret Passwords</DialogTitle>
         <DialogContent>
@@ -38,7 +55,7 @@ const Index = (props) => {
           </Button>
         </DialogActions>
       </Dialog>
-      <Typography variant="h4" gutterBottom className={classes.nameHeading}>
+      <Typography variant="h4" gutterBottom>
         {name}
       </Typography>
       <img src="/static/logo.png" />
@@ -48,7 +65,8 @@ const Index = (props) => {
       <Button variant="contained" color="secondary" onClick={handleClick}>
         Super Secret Password
       </Button>
-    </div>
+      <MyButton2 textcolor="white">World</MyButton2>
+    </Layout>
   );
 };
 
