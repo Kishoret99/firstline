@@ -2,10 +2,12 @@ import {
   MuiThemeProvider,
   StylesProvider,
   ThemeProvider,
+  withStyles,
 } from '@material-ui/core';
 import App, { AppProps, AppContext } from 'next/app';
 import Head from 'next/head';
 import theme from '../shared/theme';
+import '../styles/global.css';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (

@@ -7,10 +7,13 @@ export class PageController {
   constructor(private readonly next: NextService) {}
 
   @Get()
-  public async showHome(
-    @Req() req: IncomingMessage,
-    @Res() res: ServerResponse,
-  ) {
+  public async home(@Req() req: IncomingMessage, @Res() res: ServerResponse) {
+    res.setHeader('Set-Cookie', 'isLoggedin=true');
     this.next.render('/index', { name: 'kishore3', color: 'yellow' }, req, res);
+  }
+
+  @Get('/login')
+  public async login(@Req() req: IncomingMessage, @Res() res: ServerResponse) {
+    this.next.render('/login', req, res);
   }
 }
