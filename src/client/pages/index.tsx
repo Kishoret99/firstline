@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import theme from '../shared/theme';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import theme from '../shared/theme';
+import { useState } from 'react';
 
 export const MyButton = withStyles({
   root: {
@@ -32,7 +32,6 @@ export const MyButton2 = withStyles({
     [theme.breakpoints.up('md')]: {
       backgroundColor: theme.palette.primary.main,
     },
-    color: (props) => props?.textcolor,
   },
 })(MyButton);
 
@@ -44,7 +43,7 @@ const Index = (props) => {
 
   return (
     <Layout>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose} Paper>
         <DialogTitle>Super Secret Passwords</DialogTitle>
         <DialogContent>
           <DialogContentText>1-2-3-4-5</DialogContentText>
@@ -65,7 +64,7 @@ const Index = (props) => {
       <Button variant="contained" color="secondary" onClick={handleClick}>
         Super Secret Password
       </Button>
-      <MyButton2 textcolor="white">World</MyButton2>
+      <MyButton2>World</MyButton2>
     </Layout>
   );
 };

@@ -1,0 +1,20 @@
+module.exports = {
+  singleQuote: true,
+  trailingComma: 'all',
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  importOrderGroupNamespaceSpecifiers: true,
+  importOrderCaseInsensitive: true,
+  trailingComma: 'all',
+  singleQuote: true,
+  semi: true,
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  importOrder: ['<THIRD_PARTY_MODULES>'],
+  importOrderParserPlugins: [
+    'jsx',
+    'typescript',
+    'classProperties',
+    'decorators-legacy',
+  ],
+  overrides: [{ files: ['*.ts'], options: { parser: 'babel-ts' } }],
+};

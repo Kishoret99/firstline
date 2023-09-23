@@ -52,8 +52,16 @@ export const FullWidthGridItem = withStyles({
   },
 })(Grid);
 
-const AppDiv = ({ classes, children }) => {
+export const AppDiv = ({ classes, children }) => {
   return <div className={classes.root}>{children}</div>;
+};
+
+export const AppForm = ({ classes, children, ...rest }) => {
+  return (
+    <form className={classes.root} {...rest}>
+      {children}
+    </form>
+  );
 };
 
 export const FullWidthDiv = withStyles({

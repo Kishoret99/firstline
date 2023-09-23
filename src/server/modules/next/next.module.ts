@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-const createServer = require('next');
 import { Options } from 'next/dist/server/next-server';
+
 import { NextService } from './next.service';
+
+const createServer = require('next');
 
 type NextServerConstructor = Omit<Options, 'staticMarkup'> & {
   dev?: boolean;

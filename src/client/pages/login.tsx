@@ -1,18 +1,23 @@
-import { Button, darken, Grid, Link, withStyles } from '@material-ui/core';
+import * as Yup from 'yup';
+import API from '../shared/api';
 import theme, {
-  ErrorText,
-  FormRowGridItem,
+  AppForm,
   AppHeader,
   AppInput,
-  AppTypography,
+  AppLabel,
   AppPassword,
   AppPrimaryButton,
+  AppTypography,
+  ErrorText,
+  FormRowGridItem,
+  LinkText,
   SmallLabel,
   VeritcalSpace,
-  AppLabel,
-  LinkText,
 } from '../shared/theme';
-import React from 'react';
+import { Button, darken, Grid, Link, withStyles } from '@material-ui/core';
+import { Formik } from 'formik';
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export const ForgotPwdLink = withStyles({
   root: {
@@ -86,74 +91,160 @@ export const GridWrapper = withStyles({
   },
 })(Grid);
 
-export default function Login(props) {
-  return (
-    <GridWrapper container direction="column" alignItems="center" spacing={2}>
-      <VeritcalSpace />
-      <Grid item xs></Grid>
-      <Grid item xs></Grid>
-      <Grid item xs></Grid>
-      <Grid item xs></Grid>
-      <Grid item>
-        <AppHeader>welcome</AppHeader>
-      </Grid>
-      <Grid item xs></Grid>
-      <FormRowGridItem>
-        <Span>Login to App to view hyper-personalized job recommendations</Span>
-      </FormRowGridItem>
-      <Grid item xs></Grid>
-      <FormRowGridItem item>
-        <Grid container direction="row" spacing={2}>
-          <Grid item xs={6}>
-            <LinkedIn>Linkedin</LinkedIn>
-          </Grid>
-          <Grid item xs={6}>
-            <Google>Google</Google>
-          </Grid>
-        </Grid>
-      </FormRowGridItem>
-      <FormRowGridItem item>
-        <Grid item>
-          <AppLabel>Email</AppLabel>
-        </Grid>
-        <Grid item container>
-          <AppInput name="email" />
-          <ErrorText>
-            {/* {formik.touched.email && formik.errors.email} */}
-          </ErrorText>
-        </Grid>
-      </FormRowGridItem>
+export const LoginForm = withStyles({
+  root: {},
+})(AppForm);
 
-      <FormRowGridItem item>
-        <Grid item>
-          <AppLabel>Password</AppLabel>
-        </Grid>
-        <Grid item container direction="column">
-          <AppPassword name="password" type={'password'} />
-          <ErrorText>
-            {/* {formik.touched.password && formik.errors.password} */}
-          </ErrorText>
-        </Grid>
-      </FormRowGridItem>
-      <Grid item xs></Grid>
-      <FormRowGridItem item container justify="center">
-        <AppPrimaryButton type="submit">log In</AppPrimaryButton>
-      </FormRowGridItem>
-      {/* {message && <Alert severity={severity}>{message}</Alert>} */}
-      <Grid item xs></Grid>
-      <ForgotPwdLink href="#" underline="always">
-        Forgot your password?
-      </ForgotPwdLink>
-      <Grid item></Grid>
-      <Grid item>
-        <Grid container direction="row" alignItems="baseline">
-          <SmallLabel>If you are not yet registered,&nbsp;</SmallLabel>
-          <LinkText href="#" underline="always">
-            Register Now!
-          </LinkText>
-        </Grid>
-      </Grid>
-      <Grid item xs></Grid>
-    </GridWrapper>
+export const LoginGrid = withStyles({
+  root: {},
+})(Grid);
+
+const schema = Yup.object().shape({
+  email: Yup.string()
+    .email('Please enter a valid email address')
+    .required('Email is required'),
+  password: Yup.string().required('Password is required'),
+});
+
+export default function Login(props) {
+  const dispatch = useDispatch();
+  const hospitalName = useSelector(
+    (state: any) => state.hospitalName || props._hospitalName,
+  );
+  useEffect(() => {
+    dispatch({
+      type: 'UPDATE_HOSPITAL_NAME',
+      payload: props._hospitalName,
+    });
+  }, [props._hospitalName]);
+  const ref = useRef(null);
+
+  const handleLoginWithEmailPassword = async (values) => {
+    console.log(values);
+    try {
+      let url = `/api/job/share/${props.jobId}`;
+      const res = await API.Post(url, values);
+      if (res.status === 200) {
+      }
+    } catch (e) {}
+  };
+
+  return (
+    <Formik
+      innerRef={ref}
+      initialValues={{
+        email: 'kishore2',
+        password: '',
+      }}
+      onSubmit={(values) => {
+        handleLoginWithEmailPassword(values);
+      }}
+      validationSchema={schema}
+      validateOnBlur={true}
+    >
+      {(formik) => (
+        <GridWrapper
+          container
+          direction="column"
+          alignItems="center"
+          spacing={2}
+        >
+          <VeritcalSpace />
+          <Grid item xs></Grid>
+          <Grid item xs></Grid>
+          <Grid item xs></Grid>
+          <Grid item xs></Grid>
+          <Grid item>
+            <AppHeader>welcome to {hospitalName}</AppHeader>
+          </Grid>
+          <Grid item xs></Grid>
+          <FormRowGridItem>
+            <Span>
+              Login to App to view hyper-personalized job recommendations
+            </Span>
+          </FormRowGridItem>
+          <Grid item xs></Grid>
+          <FormRowGridItem item>
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs={6}>
+                <LinkedIn>Linkedin</LinkedIn>
+              </Grid>
+              <Grid item xs={6}>
+                <Google>Google</Google>
+              </Grid>
+            </Grid>
+          </FormRowGridItem>
+          <FormRowGridItem item>
+            <Grid item>
+              <AppLabel>Email</AppLabel>
+            </Grid>
+            <Grid item container>
+              <AppInput
+                name="email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email || ''}
+              />
+              <ErrorText>
+                <>{formik.touched.email && formik.errors.email}</>
+              </ErrorText>
+            </Grid>
+          </FormRowGridItem>
+          <FormRowGridItem item>
+            <Grid item>
+              <AppLabel>Password</AppLabel>
+            </Grid>
+            <Grid item container direction="column">
+              <AppPassword
+                name="password"
+                type={'password'}
+                value={formik.values.password || ''}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.password && formik.errors.password
+                    ? true
+                    : false
+                }
+              />
+              <ErrorText>
+                <>{formik.touched.password && formik.errors.password}</>
+              </ErrorText>
+            </Grid>
+          </FormRowGridItem>
+
+          <Grid item xs></Grid>
+
+          <FormRowGridItem item container justifyContent="center">
+            <AppPrimaryButton
+              type="submit"
+              onClick={(e: any) => formik.handleSubmit(e)}
+            >
+              log In
+            </AppPrimaryButton>
+          </FormRowGridItem>
+          {/* {message && <Alert severity={severity}>{message}</Alert>} */}
+
+          <Grid item xs></Grid>
+          <ForgotPwdLink href="#" underline="always">
+            Forgot your password?
+          </ForgotPwdLink>
+          <Grid item></Grid>
+          <Grid item>
+            <Grid container direction="row" alignItems="baseline">
+              <SmallLabel>If you are not yet registered,&nbsp;</SmallLabel>
+              <LinkText href="#" underline="always">
+                Register Now!
+              </LinkText>
+            </Grid>
+          </Grid>
+          <Grid item xs></Grid>
+        </GridWrapper>
+      )}
+    </Formik>
   );
 }
+
+Login.getInitialProps = async ({ req, query }) => {
+  return query;
+};

@@ -1,13 +1,9 @@
 import axios from 'axios';
-import Auth from '../auth';
-import { constants } from '../constants';
 
 const getToken = () => {
-  const authInstance = new Auth(); // This must be avoided.
-  const token = authInstance.isLoggedIn()
-    ? authInstance.user().accessToken
-    : '';
-  return token ? `Bearer ${token}` : '';
+  // const token = cookies;
+  // return token ? `Bearer ${token}` : '';
+  return '';
 };
 
 const requestInterceptor = (request) => {
@@ -20,10 +16,8 @@ const requestInterceptor = (request) => {
 
 const api = axios.create({
   baseURL: '', // TODO: configure API base path here
-  timeout: constants.API_TIMEOUT,
   headers: {
     'content-type': 'application/json',
-    tenantId: 'jahoo',
   },
 });
 
@@ -42,8 +36,8 @@ export default class API {
     return api.put(url, body, { headers });
   }
 
-  static Delete(url, body, headers = {}) {
-    return api.delete(url, body, { headers });
+  static Delete(url, headers = {}) {
+    return api.delete(url, { headers });
   }
 
   static UploadFile(url, fileName, file, headers = {}) {
@@ -55,13 +49,13 @@ export default class API {
   static DownloadImage(url, headers = {}) {
     const token = getToken();
     let formattedHeaders;
-    if (url.toLowerCase().indexOf(constants.TENANT_ID.toLowerCase()) > -1) {
-      formattedHeaders = {
-        Authorization: token,
-        tenantId: 'jahoo',
-        ...headers,
-      };
-    }
+    // if (url.toLowerCase().indexOf(constants.TENANT_ID.toLowerCase()) > -1) {
+    //   formattedHeaders = {
+    //     Authorization: token,
+    //     tenantId: 'jahoo',
+    //     ...headers,
+    //   };
+    // }
     return axios({
       url: url,
       headers: { Authorization: token },

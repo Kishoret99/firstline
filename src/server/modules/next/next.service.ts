@@ -1,5 +1,6 @@
-import { IncomingMessage, ServerResponse } from 'http';
 import { Injectable } from '@nestjs/common';
+import { Request, Response } from 'express';
+import { IncomingMessage, ServerResponse } from 'http';
 import { NextServer } from 'next/dist/server/next';
 
 @Injectable()
@@ -14,17 +15,13 @@ export class NextService {
     return this.server;
   }
 
-  public async render(
-    page: string,
-    req: IncomingMessage,
-    res: ServerResponse,
-  ): Promise<void>;
+  public async render(page: string, req: Request, res: Response): Promise<void>;
 
   public async render<T>(
     page: string,
     data: T,
-    req: IncomingMessage,
-    res: ServerResponse,
+    req: Request,
+    res: Response,
   ): Promise<void>;
 
   public async render(
@@ -40,7 +37,7 @@ export class NextService {
     }
   }
 
-  private isIncomingMessage(arg: any): arg is IncomingMessage {
-    return typeof (arg as IncomingMessage).httpVersion === 'string';
+  private isIncomingMessage(arg: any): arg is Request {
+    return typeof (arg as Request).httpVersion === 'string';
   }
 }
