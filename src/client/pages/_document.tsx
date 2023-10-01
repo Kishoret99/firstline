@@ -1,7 +1,6 @@
-import React from 'react';
-import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/styles';
-import theme from '../shared/theme';
+import Document, { Head, Html, Main, NextScript } from 'next/document';
+import React from 'react';
 
 class MyDocument extends Document {
   render() {
@@ -32,6 +31,7 @@ class MyDocument extends Document {
             href="/static/apple-touch-icon.png"
           />
           <link rel="apple-touch-icon" href="/static/icon.png" />
+          <script src="https://cdn.tailwindcss.com"></script>
         </Head>
         <body>
           <Main />
